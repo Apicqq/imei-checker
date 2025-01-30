@@ -11,7 +11,7 @@ http_client = HttpClient()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> None:
+async def lifespan(_: FastAPI) -> None:
     """Lifespan of the app."""
     http_client.start()
     try:
