@@ -38,7 +38,7 @@ async def post_stop(_: Application) -> None:
     await http_client.stop()
 
 
-async def verify_imei(update: Update, _: ContextTypes.DEFAULT_TYPE):
+async def verify_imei(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Check the IMEI of the device.
 
@@ -53,6 +53,7 @@ async def verify_imei(update: Update, _: ContextTypes.DEFAULT_TYPE):
             reply_markup=ForceReply(selective=True),
         )
         return
+    await context.bot.send_chat_action(update.effective_chat.id, "typing")
     result: Response = await check_imei(
         update.message.text,
         http_client.session,
