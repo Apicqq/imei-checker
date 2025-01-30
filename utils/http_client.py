@@ -1,5 +1,6 @@
 import aiohttp
 
+
 class HttpClient:
     """Client to persist opened aiohttp session."""
 
@@ -15,5 +16,3 @@ class HttpClient:
     def __call__(self) -> aiohttp.ClientSession:
         assert self.session is not None
         return self.session
-
-

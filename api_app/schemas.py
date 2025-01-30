@@ -7,6 +7,7 @@ class ImeiIn(BaseModel):
     imei: str = ...
     token: str = ...
 
+
 class ImeiOut(BaseModel):
     """Schema for IMEI verification output."""
 
