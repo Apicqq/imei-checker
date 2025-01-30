@@ -1,6 +1,8 @@
 import aiohttp
 
 class HttpClient:
+    """Client to persist opened aiohttp session."""
+
     session: aiohttp.ClientSession = None
 
     def start(self):

@@ -1,22 +1,34 @@
+from collections import namedtuple
 import json
+from http import HTTPStatus
 
 import aiohttp
 
-async def check_imei(imei: str, session: aiohttp.ClientSession) -> dict:
+from core.settings import settings
+
+Response = namedtuple("response", ["status", "json"])
+
+async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
+    """
+    Utility function to verify IMEI.
+
+    Gathers data from external API service and returns it.
+    :param imei: IMEI of the device.
+    :param session: session to be used.
+    :return: Response object, which consists of status code and JSON data.
+    """
     try:
         async with session.post(
-                "https://api.imeicheck.net/v1/checks",
+                settings.imeicheck_url,
                 headers={
-                    "Authorization": "Bearer e4oEaZY1Kom5OXzybETkMlwjOCy3i8GSCGTHzWrhd4dc563b",
+                    "Authorization": f"Bearer {settings.imeicheck_token}",
                     "Content-Type": "application/json"
                 },
                 data=json.dumps({
                     "deviceId": imei,
-                    "serviceId": 12
+                    "serviceId": settings.imeicheck_service_id
                 })
         ) as response:
-            if response.status != 201:
-                return {"error": await response.text()}
-            return await response.json()
+            return Response(response.status, await response.json())
     except aiohttp.ClientConnectorError as exc:
-        return {"error": str(exc)}
+        return Response(HTTPStatus.SERVICE_UNAVAILABLE, str(exc))
