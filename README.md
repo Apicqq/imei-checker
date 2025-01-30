@@ -43,7 +43,7 @@ POST api/check-imei
   "orderId": null,
   "service": {
     "id": 12,
-    "title": "Mock service with only successful results"
+    "title": "Apple Basic Info"
   },
   "amount": "0.00",
   "deviceId": "351344354167758",
