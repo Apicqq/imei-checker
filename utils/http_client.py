@@ -1,5 +1,3 @@
-import json
-
 import aiohttp
 
 class HttpClient:
