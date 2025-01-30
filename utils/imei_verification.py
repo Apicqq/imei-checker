@@ -11,7 +11,7 @@ Response = namedtuple("response", ["status", "json"])
 
 async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
     """
-    Utility function to verify IMEI.
+    Verify IMEI.
 
     Gathers data from external API service and returns it.
     :param imei: IMEI of the device.
@@ -26,7 +26,7 @@ async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
                 "Content-Type": "application/json",
             },
             data=json.dumps(
-                {"deviceId": imei, "serviceId": settings.imeicheck_service_id}
+                {"deviceId": imei, "serviceId": settings.imeicheck_service_id},
             ),
         ) as response:
             return Response(response.status, await response.json())

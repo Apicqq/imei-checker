@@ -25,7 +25,8 @@ app = FastAPI(lifespan=lifespan, docs_url="/swagger")
 
 @app.post("/api/check-imei")
 async def check_imei(
-    body: ImeiIn, session: aiohttp.ClientSession = Depends(http_client)
+    body: ImeiIn,
+    session: aiohttp.ClientSession = Depends(http_client),
 ) -> ImeiOut:
     """Endpoint for IMEI verification via API."""
     return await verify_imei(body, session)

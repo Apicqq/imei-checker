@@ -23,37 +23,39 @@ http_client = HttpClient()
 
 
 def format_message(message: dict) -> str:
-    """Formats a dictionary into JSON dictionary with indentation."""
+    """Format a dictionary into JSON dictionary with indentation."""
     formatted_json = json.dumps(message, indent=2, ensure_ascii=False)
     return f"```\n{formatted_json}\n```"
 
 
 async def post_init(_: Application) -> None:
-    """Initiates aiohttp session."""
+    """Initiate aiohttp session."""
     http_client.start()
 
 
 async def post_stop(_: Application) -> None:
-    """Stops aiohttp session after bot is stopped."""
+    """Stop aiohttp session after bot is stopped."""
     await http_client.stop()
 
 
 async def verify_imei(update: Update, _: ContextTypes.DEFAULT_TYPE):
     """
-    Checks the IMEI of the device.
+    Check the IMEI of the device.
 
     before proceeding, checks, whether user is allowed to use the bot.
     """
     if update.effective_user.id not in map(
-        int, os.getenv("WHITE_LIST_USER_IDS").split(",")
+        int,
+        os.getenv("WHITE_LIST_USER_IDS").split(","),
     ):
         await update.message.reply_html(
-            f"You are not allowed to use this bot.",
+            "You are not allowed to use this bot.",
             reply_markup=ForceReply(selective=True),
         )
         return
     result: Response = await check_imei(
-        update.message.text, http_client.session
+        update.message.text,
+        http_client.session,
     )
     await update.message.reply_markdown(format_message(result.json))
 
