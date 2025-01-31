@@ -31,7 +31,7 @@ async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
                 "Content-Type": "application/json",
             },
             json={
-                "deviceId": imei, "serviceId": settings.imeicheck_service_id
+                "deviceId": imei, "serviceId": settings.imeicheck_service_id,
             },
         ) as response:
             return Response(response.status, await response.json())
