@@ -58,7 +58,7 @@ async def verify_imei(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update.message.text,
         http_client.session,
     )
-    await update.message.reply_markdown(format_message(result.json))
+    await update.message.reply_markdown(format_message(result.data))
 
 
 def main() -> None:

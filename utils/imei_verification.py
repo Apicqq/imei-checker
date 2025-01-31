@@ -1,12 +1,17 @@
-from collections import namedtuple
-import json
+import asyncio
+from dataclasses import dataclass
 from http import HTTPStatus
 
 import aiohttp
 
 from core.settings import settings
 
-Response = namedtuple("response", ["status", "json"])
+@dataclass(frozen=True)
+class Response:
+    """Class for representing response from external API call."""
+
+    status: int
+    data: dict | str
 
 
 async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
@@ -25,10 +30,12 @@ async def check_imei(imei: str, session: aiohttp.ClientSession) -> Response:
                 "Authorization": f"Bearer {settings.imeicheck_token}",
                 "Content-Type": "application/json",
             },
-            data=json.dumps(
-                {"deviceId": imei, "serviceId": settings.imeicheck_service_id},
-            ),
+            json={
+                "deviceId": imei, "serviceId": settings.imeicheck_service_id
+            },
         ) as response:
             return Response(response.status, await response.json())
-    except aiohttp.ClientConnectorError as exc:
+    except aiohttp.ClientError as exc:
         return Response(HTTPStatus.SERVICE_UNAVAILABLE, str(exc))
+    except asyncio.TimeoutError as exc:
+        return Response(HTTPStatus.GATEWAY_TIMEOUT, str(exc))

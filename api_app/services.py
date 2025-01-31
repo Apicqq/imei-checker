@@ -19,5 +19,5 @@ async def verify_imei(body: ImeiIn, session: aiohttp.ClientSession) -> ImeiOut:
         raise HTTPException(HTTPStatus.UNAUTHORIZED, "Invalid API token")
     result: Response = await check_imei(body.imei, session)
     if result.status != HTTPStatus.CREATED:
-        raise HTTPException(result.status, result.json)
-    return ImeiOut(status=result.status, result=result.json)
+        raise HTTPException(result.status, result.data)
+    return ImeiOut(status=result.status, result=result.data)
